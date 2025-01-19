@@ -1,5 +1,9 @@
 # kickstart.nvim
 
+## Preface
+  `:Mason` LSPs
+    - gopls, html-ls, lau-language-server, stylua, terraform-ls, tflint, typescript-language-server 
+
 ## Introduction
 
 A starting point for Neovim that is:
