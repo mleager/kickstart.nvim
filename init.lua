@@ -100,12 +100,6 @@ vim.g.have_nerd_font = true
 --  For more options, you can see `:help option-list`
 
 -- Set Tabs
---
--- local set = vim.opt
---  set.tabstop
---  set.softtabstop
---  set.shiftwidth
---
 -- vim.opt.expandtab = true
 vim.opt.softtabstop = 4
 vim.opt.shiftwidth = 4
@@ -166,6 +160,9 @@ vim.opt.inccommand = 'split'
 
 -- Show which line your cursor is on
 vim.opt.cursorline = true
+
+-- Show line at Column 80 to denote code length
+vim.opt.colorcolumn = '80'
 
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 10
@@ -247,10 +244,32 @@ require('lazy').setup({
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
   -- keys can be used to configure plugin behavior/loading/etc.
+
+  -- TABNINE
+  { 'codota/tabnine-nvim', build = './dl_binaries.sh' },
+
+  -- require('tabnine').setup()
+
+  -- require('tabnine')
+  --   .setup() --{
+  --   disable_auto_comment = true,
+  --   accept_keymap = '<Tab>',
+  --   dismiss_keymap = '<C-]>',
+  --   debounce_ms = 800,
+  --   suggestion_color = { gui = '#808080', cterm = 244 },
+  --   exclude_filetypes = { 'TelescopePrompt', 'NvimTree' },
+  --   log_file_path = nil, -- absolute path to Tabnine log file
+  --   ignore_certificate_errors = false,
+  --   -- workspace_folders = {
+  --   --   paths = { "/your/project" },
+  --   --   get_paths = function()
+  --   --       return { "/your/project" }
+  --   --   end,
+  --   -- },
+  -- },
   --
   -- Use `opts = {}` to force a plugin to be loaded.
   --
-
   -- Here is a more advanced example where we pass configuration
   -- options to `gitsigns.nvim`. This is equivalent to the following Lua:
   --    require('gitsigns').setup({ ... })
@@ -630,7 +649,7 @@ require('lazy').setup({
         -- clangd = {},
         gopls = {},
         terraformls = {},
-        -- pyright = {},
+        pyright = {},
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
@@ -652,7 +671,7 @@ require('lazy').setup({
                 callSnippet = 'Replace',
               },
               -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
-              -- diagnostics = { disable = { 'missing-fields' } },
+              diagnostics = { disable = { 'missing-fields' } },
             },
           },
         },
@@ -863,6 +882,7 @@ require('lazy').setup({
 
       -- You can configure highlights by doing something like:
       vim.cmd.hi 'Comment gui=none'
+      vim.cmd.hi 'ColorColumn guibg=#242e42'
     end,
   },
 
@@ -944,8 +964,8 @@ require('lazy').setup({
   -- require 'kickstart.plugins.debug',
   -- require 'kickstart.plugins.indent_line',
   -- require 'kickstart.plugins.lint',
-  -- require 'kickstart.plugins.autopairs',
-  -- require 'kickstart.plugins.neo-tree',
+  require 'kickstart.plugins.autopairs',
+  require 'kickstart.plugins.neo-tree',
   -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
@@ -979,6 +999,38 @@ require('lazy').setup({
     },
   },
 })
+
+-------------
+-- TABNINE --
+-------------
+vim.defer_fn(function()
+  local status, tabnine = pcall(require, 'tabnine')
+  if status then
+    tabnine.setup {
+      disable_auto_comment = true,
+      accept_keymap = '<S-Tab>',
+      dismiss_keymap = '<C-]>',
+      debounce_ms = 500,
+      suggestion_color = { gui = '#808080', cterm = 244 },
+      exclude_filetypes = { 'TelescopePrompt', 'NvimTree' },
+      log_file_path = nil,
+      ignore_certificate_errors = false,
+      -- workspace_folders = {
+      --   paths = { "/your/project" },
+      --   get_paths = function()
+      --       return { "/your/project" }
+      --   end,
+      -- },
+    }
+  else
+    print 'Tabnine not found. Make sure it is installed properly.'
+  end
+end, 100)
+
+-- TABNINE Keymaps for Chat View
+vim.keymap.set('n', '<Leader>cc', ':TabnineChat<CR>', { noremap = true, silent = true })
+-- vim.keymap.set('v', '<Leader>ce', ':TabnineExplain<CR>', { noremap = true, silent = true })
+-- vim.keymap.set('v', '<Leader>cf', ':TabnineFix<CR>', { noremap = true, silent = true })
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
