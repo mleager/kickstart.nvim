@@ -4,6 +4,12 @@
   `:Mason` LSPs  
     - gopls, html-ls, lau-language-server, stylua, terraform-ls, tflint, typescript-language-server 
 
+## Additions
+
+- Floating terminal
+- Tabnine with basic key maps
+- Add comment strings for terraform files
+
 ## Introduction
 
 A starting point for Neovim that is:
