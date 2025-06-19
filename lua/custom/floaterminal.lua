@@ -55,7 +55,7 @@ function M.setup()
 
   -- Call toggle_terminal func with specified keymap
   vim.api.nvim_create_user_command('Float', toggle_terminal, {})
-  vim.keymap.set({ 'n', 't' }, '<space>tt', toggle_terminal)
+  vim.keymap.set({ 'n', 't' }, '<space>tt', toggle_terminal, { desc = 'Toggle Terminal' })
 end
 
 return M
