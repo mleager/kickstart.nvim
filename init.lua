@@ -973,7 +973,6 @@ require('lazy').setup({
   --
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
   -- { import = 'custom.plugins' },
-  require('custom.floaterminal').setup(),
   -- For additional information with loading, sourcing and examples see `:help lazy.nvim-🔌-plugin-spec`
   -- Or use telescope!
   -- In normal mode type `<space>sh` then write `lazy.nvim-plugin`
@@ -1000,9 +999,17 @@ require('lazy').setup({
   },
 })
 
--------------
--- TABNINE --
--------------
+----------------------------------------
+--------        MY STUFF        --------
+----------------------------------------
+
+-- Floating Terminal
+require('custom.floaterminal').setup()
+
+-- Fix Terraform and HCL Comment String
+require 'autocmds.terraform'
+
+-- TabNine
 vim.defer_fn(function()
   local status, tabnine = pcall(require, 'tabnine')
   if status then
@@ -1027,7 +1034,7 @@ vim.defer_fn(function()
   end
 end, 100)
 
--- TABNINE Keymaps for Chat View
+-- TabNine Keymaps
 vim.keymap.set('n', '<Leader>cc', ':TabnineChat<CR>', { noremap = true, silent = true, desc = 'Tabnine Chat' })
 -- vim.keymap.set('v', '<Leader>ce', ':TabnineExplain<CR>', { noremap = true, silent = true })
 -- vim.keymap.set('v', '<Leader>cf', ':TabnineFix<CR>', { noremap = true, silent = true })
